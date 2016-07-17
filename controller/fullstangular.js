@@ -6,14 +6,14 @@ angular.module('project', ['ngRoute', 'firebase' ])
 })
 .service('FbAuth', function($q, $firebase, $firebaseAuth, fbRef){
   var auth;
-  return function (){
+  return function () {
     if (auth) return $q.when(auth);
     var authObj = $firebaseAuth(fbRef);
-    if (authObj.$getAuth()){
+    if (authObj.$getAuth()) {
       return $q.when(auth=authObj.$getAuth());
     }
     var deferred = $q.defer();
-    authObj.$authAnonymously().then(function(authData)){
+    authObj.$authAnonymously().then(function(authData){
       auth = authData;
       deferred.resolve(authData);
     });
@@ -23,14 +23,14 @@ angular.module('project', ['ngRoute', 'firebase' ])
 
 .service('Projects', function($q, $firebase, fbRef, fbAuth, projectListValue){
   var self = this;
-  this.fetch = function(){
+  this.fetch = function() {
     if (this.projects) return $q.when(this.projects);
     return fbAuth().then(function(auth){
       var deferred = $q.defer();
       var ref = fbRef.child('prjects-fresh/' + auth.auth.uid);
       var $projects = $firebase(ref);
       ref.on('value', function(snapshot){
-        if (snapshot.val()===null){
+        if (snapshot.val() === null) {
           $projects.$set(projectListValue);
         }
         self.projects = $projects.$asArray();
@@ -44,10 +44,10 @@ angular.module('project', ['ngRoute', 'firebase' ])
   };
 })
 
-.config(function($routeProvider){
+.config(function($routeProvider) {
   var resolveProjects = {
     projects: function (Projects) {
-      return Projects.fetch(;)
+      return Projects.fetch();
     }
   };
 
@@ -72,7 +72,7 @@ angular.module('project', ['ngRoute', 'firebase' ])
     });
 })
 
-.controller('ProjectListController', function(projects){
+.controller('ProjectListController', function(projects) {
   var projectList = this;
   projectList.projects = projects;
 })
@@ -87,7 +87,7 @@ angular.module('project', ['ngRoute', 'firebase' ])
 })
 
 .controller('EditProjectController',
-  function($location, $routeParams, projects){
+  function($location, $routeParams, projects) {
     var editProject = this;
     var projectId = $routeParams.projectId, 
         projectIndex;
@@ -96,14 +96,14 @@ angular.module('project', ['ngRoute', 'firebase' ])
     projectIndex = editProject.projects.$indexFor(projectId);
     editProject.project = editProject.projects[projectIndex];
 
-    editProject.destroy = function(){
+    editProject.destroy = function() {
       editProject.projects.$remove(editProject.project).then(function(data){
         $location.path('/');
       });
     };
 
     editProject.save = function() {
-      editProject.projects.$save(editProject.project).then(function(data){
+      editProject.projects.$save(editProject.project).then(function(data) {
         $location.path('/');
       });
   };

@@ -5,12 +5,16 @@ placeholder="Search">
   <tr>
     <th>Project</th>
     <th>Description</th>
-    <th><a href="#/new"</a></th>
+    <th><a href="#/new"></a></th>
   </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="">
-      
-    </tr>
+  <tr ng-repeat="project in projectList.projects | filter:projectList.search | orderBy: 'name'">
+    <td><a ng-href="{{project.site}}" target="_blank">{{project.name}}</a></td>
+    <td>{{project.description}}</td>
+    <td>
+      <a ng-href="#/edit/{{project.$id}}"></a>
+    </td>  
+  </tr>
   </tbody>
 </table>
