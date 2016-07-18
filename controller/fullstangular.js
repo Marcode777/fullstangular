@@ -1,6 +1,6 @@
-angular.module('project', ['ngRoute', 'firebase' ])
+angular.module('project', ['ngRoute', 'firebase'])
 
-.value('fbURL', 'https://ng-projects-list.firebaseio.com/')
+.value('fbURL', 'https://fullstangular.firebaseio.com/') //changed this to my own database on firebase from 'https://ng-projects-list.firebaseio.com/'
 .service('fbRef', function (fbURL){
   return new Firebase(fbURL)
 })
